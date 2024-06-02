@@ -1,34 +1,34 @@
-#AirBnB clone - MySQL
+# AirBnB clone - MySQL
 Welcome to the AirBnB Clone project! This project is a simplified version of the popular AirBnB service, implemented with a MySQL database. This README file will guide you through the setup, usage, and structure of the project.
 
-#Description
+# Description
 This project is part of the Holberton School curriculum and serves as an introduction to back-end development with MySQL. The goal is to build a web application similar to AirBnB, which allows users to perform various operations such as creating and managing user accounts, listings, reservations, and reviews.
 
-#Features
+# Features
 
-*User authentication and management
-*CRUD operations for listings, reservations, and reviews
-*Search functionality for listings
-*Integration with a MySQL database
-*RESTful API
+* User authentication and management
+* CRUD operations for listings, reservations, and reviews
+* Search functionality for listings
+* Integration with a MySQL database
+* RESTful API
 
 #Requirements
 
-*Python 3.8+
-*MySQL 8.0+
-*Flask
-*SQLAlchemy
-*Flask-RESTful
+* Python 3.8+
+* MySQL 8.0+
+* Flask
+* SQLAlchemy
+* Flask-RESTful
 
-#Configure the MySQL database:
+# Configure the MySQL database:
 
-*Create a new MySQL Database
+* Create a new MySQL Database
 CREATE DATABASE airbnb_clone;
 
-#Usage
+# Usage
 Once the Flask application is running, you can access the API at http://localhost:5000. Here are some example endpoints:
 
-*User registration:
+* User registration:
 POST /users
 {
   "username": "john_doe",
@@ -36,7 +36,7 @@ POST /users
   "password": "securepassword"
 }
 
-#Contributing
+# Contributing
 We welcome contributions to this project! If you would like to contribute, please follow these steps:
 
 1. Fork the repository
@@ -46,7 +46,7 @@ We welcome contributions to this project! If you would like to contribute, pleas
 5. Push to the branch (git push origin feature-branch)
 6. Open a pull request
 
-#AUTHORS
+# AUTHORS
 
 * BElinda Belange Larose
 * Otieno Junior Collins
