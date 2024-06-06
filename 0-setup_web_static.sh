@@ -1,32 +1,40 @@
-#!/usr/bin/env bash
-# describe it then
-apt-get update
-apt-get -y install nginx
+#!/bin/bash
 
-directories=("/data/web_static/releases/test" "/data/web_static/shared/")
+# Install Nginx if it is not already installed
+if ! dpkg -l | grep -q nginx; then
+    apt-get update
+    apt-get -y install nginx
+fi
 
-for directory in "${directories[@]}"; do
-  #  if [ ! -e "$directory" ]; then
-  mkdir -p "$directory"
-  #  fi
-done
+# Create the necessary directories
+mkdir -p /data/web_static/releases/test /data/web_static/shared
 
+# Create a fake HTML file to test the Nginx configuration
 echo "<html>
   <head>
   </head>
   <body>
     Holberton School
   </body>
-</html>" >/data/web_static/releases/test/index.html
+</html>" > /data/web_static/releases/test/index.html
 
-# Create a symbolic link /data/web_static/current linked to the /data/web_static/releases/test/ folder.
-# If the symbolic link already exists, it should be deleted and recreated every time the script is ran
-ln --symbolic --force /data/web_static/releases/test /data/web_static/current
+# Create (or recreate) the symbolic link
+if [ -L /data/web_static/current ]; then
+    rm /data/web_static/current
+fi
+ln -s /data/web_static/releases/test/ /data/web_static/current
 
-# The -R option ensures that the ownership changes are applied
-# recursively to all files and directories within the folder
+# Give ownership of the /data/ folder to the ubuntu user and group
 chown -R ubuntu:ubuntu /data/
 
-sed -i '/listen 80 default_server;/a \ \n    location /hbnb_static {\n        alias /data/web_static/current/;\n        index index.html;\n    }' /etc/nginx/sites-available/default
+# Update the Nginx configuration
+nginx_config="/etc/nginx/sites-available/default"
 
+if ! grep -q "location /hbnb_static/" $nginx_config; then
+    sed -i "/^\s*server_name _;/a \\\n    location /hbnb_static/ {\n        alias /data/web_static/current/;\n    }\n" $nginx_config
+fi
+
+# Restart Nginx to apply the changes
 service nginx restart
+
+exit 0
