@@ -41,4 +41,5 @@ fi
 # Restart Nginx to apply the changes
 service nginx restart
 
+# Ensure the script exits successfully
 exit 0
