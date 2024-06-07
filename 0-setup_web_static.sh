@@ -8,6 +8,7 @@ set -e
 if ! dpkg -l | grep -q nginx; then
     apt-get update
     apt-get -y install nginx
+    ufw allow 'Nginx HTTP'
 fi
 
 # Create the necessary directories with appropriate permissions
@@ -20,7 +21,8 @@ echo "<html>
   <body>
     Holberton School
   </body>
-</html>" | sudo tee /data/web_static/releases/test/index.html
+</html>" > /data/web_static/releases/test/index.html
+
 # Create (or recreate) the symbolic link
 if [ -L /data/web_static/current ]; then
     rm /data/web_static/current
@@ -34,11 +36,15 @@ chown -R ubuntu:ubuntu /data/
 nginx_config="/etc/nginx/sites-available/default"
 
 if ! grep -q "location /hbnb_static/" "$nginx_config"; then
-    sed -i "/^\s*server_name _;/a \\\n    location /hbnb_static/ {\n        alias /data/web_static/current/;\n    }\n" "$nginx_config"
+    sed -i "/^\s*server_name _;/a \\\n    location /hbnb_static/ {\n        alias /data/web_static/current/;\n        autoindex off;\n    }\n" "$nginx_config"
 fi
 
 # Restart Nginx to apply the changes
 service nginx restart
 
+# Check the status of the nginx service
+service nginx status
+
 # Ensure the script exits successfully
 exit 0
+
